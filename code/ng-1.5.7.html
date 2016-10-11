@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>Angular 1.5.7 Example</title>
+        <script src="https://code.angularjs.org/1.5.7/angular.js"></script> 
+    </head>
+    <body ng-app="onefiveseven">
+        <script type="text/ng-template" id="sequence.html">
+           <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+                ng-repeat="item in $ctrl.seq track by $index" 
+                ng-style="{'width' : item*10, 'height' : item*10}"></div>
+        </script>
+        <app-title></app-title>
+        <sequence></sequence>
+        <script>
+            (function (app) {
+
+                <!-- sequenceService.js -->
+
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+
+                app.service('sequenceSvc', Service);
+
+                <!-- title.Component.js -->
+
+                function TitleController() {
+                    this.title = 'Angular 1.5.7 Example';
+                }
+
+                app.component('appTitle', {
+                    controller: TitleController,
+                    template: '<h1>{{$ctrl.title}}</h1>'
+                });
+
+                <!-- sequence.Component.js --> 
+
+                function SequenceController(svc) {
+                    this.seq = [];
+                    var x = 0;
+                    while (x < 8) {
+                        this.seq.push(svc.next());
+                        x += 1;
+                    } 
+                }
+
+                SequenceController.$inject = ['sequenceSvc'];
+
+                app.component('sequence', {
+                    controller: SequenceController,
+                    templateUrl: 'sequence.html'
+                });
+
+            })(angular.module('onefiveseven', []));
+        </script>
+    </body>
+</html>

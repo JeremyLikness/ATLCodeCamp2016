@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ng2 with 1.2.1 Upgraded</title>
+  <base href="/">
+  <script src="https://code.angularjs.org/1.2.1/angular.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script>
+            (function (app) {
+                
+                <!-- sequenceService.js -->
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+                
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+                
+                app.service('sequenceSvc', Service);              
+                
+                <!-- sequenceController.js --> 
+                app.controller('sequenceCtrl', ['$scope', 'sequenceSvc', function (scope, svc) {
+                    scope.seq = [];
+                    var x = 0;
+                    while (x < 8) {
+                        scope.seq.push(svc.next());
+                        x += 1;
+                    }
+                }]);
+
+                app.run(['$rootScope', function (rs) {
+                    rs.rsTitle = 'Angular 1.x upgraded to 2.0.0 Example';
+                }]);       
+                
+            })(angular.module('ng1', []));
+        </script>
+</head>
+<body>
+  <app-root [title]="rsTitle">Loading...</app-root>
+  <div ng-controller="sequenceCtrl">
+    <div style="border: solid 1px black; background: yellow; float: left; margin: 5px;"
+        ng-repeat="item in seq track by $index" 
+        ng-style="{'width' : item*10+'px', 'height' : item*10+'px'}"></div>
+  </div>
+</body>
+</html>
