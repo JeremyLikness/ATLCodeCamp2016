@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <title>Angular 2.0.0-rc.3 Example</title>
+        <script src="https://unpkg.com/rxjs@5.0.0-beta.7/bundles/Rx.umd.js"></script>
+        <script src="https://unpkg.com/reflect-metadata@0.1.3"></script>
+        <script src="https://unpkg.com/zone.js@0.6.23"></script>
+        <script src="https://unpkg.com/@angular/core@2.0.0/bundles/core.umd.js"></script>
+        <script src="https://unpkg.com/@angular/common@2.0.0/bundles/common.umd.js"></script>
+        <script src="https://unpkg.com/@angular/compiler@2.0.0/bundles/compiler.umd.js"></script>
+        <script src="https://unpkg.com/@angular/platform-browser@2.0.0/bundles/platform-browser.umd.js"></script>
+        <script src="https://unpkg.com/@angular/platform-browser-dynamic@2.0.0/bundles/platform-browser-dynamic.umd.js"></script>
+    </head>
+    <body>
+        <sequence-app>Initializing Angular 2</sequence-app>
+        <script type="text/javascript">
+            (function() {
+
+                <!-- sequence.Service.js -->
+
+                function Service() {
+                    this.x = 1;
+                    this.xn = 1;
+                }
+
+                Service.prototype.next = function () {
+                    var next = this.x; 
+                    this.x = this.xn; 
+                    this.xn = next + this.x; 
+                    return next;
+                };
+
+                <!-- title.Component.js -->
+
+                function TitleComponent() {
+                    this.title = 'Angular 2.0.0 Example';
+                }
+
+                TitleComponent.annotations = [
+                    new ng.core.Component({
+                        selector: 'app-title',
+                        template: '<h1>{{title}}</h1>'
+                    })
+                ];
+
+                <!-- square.Component.js -->
+
+                function SquareComponent() {
+                    this.size = 5;
+                }
+
+                SquareComponent.prototype.ngAfterViewInit = function () {
+                    this.myDiv.nativeElement.style.width = 
+                    this.myDiv.nativeElement.style.height = (this.size*10);
+                }
+
+                SquareComponent.annotations = [
+                    new ng.core.Component({
+                        selector: 'square',
+                        inputs: ['size'],
+                        queries: {
+                            myDiv: new ng.core.ViewChild('myDiv')
+                        },
+                        template: '<div #myDiv style="border: solid 1px black; background: yellow; float: left; margin: 5px;">' +
+                            '</div>'
+                    })
+                ];
+
+                <!-- sequence.Component.js -->
+
+                function SequenceComponent() {}
+
+                SequenceComponent = ng.core.Component({
+                    selector: 'sequence', 
+                    template: '<square *ngFor="let i of seq" [size]="i"></square>',
+                    directives: [ng.common.NgFor, SquareComponent]
+                }).Class({
+                    constructor: [Service, function (service) {
+                        this.seq = [];
+                        var x = 0;
+                        while (x < 8) {
+                            this.seq.push(service.next());
+                            x += 1;
+                        }                        
+                    }]
+                });
+
+                <!-- app.Component.js -->
+
+                function AppComponent() { }
+
+                AppComponent.annotations = [new ng.core.Component({
+                    selector: 'sequence-app',
+                    template: '<div><app-title></app-title><sequence></sequence></div>',
+                    directives: [TitleComponent, SequenceComponent]
+                })];
+
+                <!-- app.Module.js -->
+                function AppModule() {}
+                AppModule.annotations = [
+                new ng.core.NgModule({
+                    declarations: [AppComponent, TitleComponent, SequenceComponent, SquareComponent],
+                    imports: [ng.platformBrowser.BrowserModule],
+                    providers: [Service],
+                    bootstrap: [AppComponent]
+                })];
+
+              
+                <!-- main.js --> 
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule);
+                });
+
+            }());
+        </script>
+    </body>
+</html>
