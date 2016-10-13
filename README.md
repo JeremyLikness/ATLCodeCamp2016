@@ -34,4 +34,4 @@ Change to the `ng2-2` subdirectory
 
 If you are serving from the local filesystem, open `dist\index.html` and remove the `<base href...` tag.
 
-Now open the `index.html` at the root code the `code` folder. 
+Now open the `index.html` at the root of the `code` folder. 
