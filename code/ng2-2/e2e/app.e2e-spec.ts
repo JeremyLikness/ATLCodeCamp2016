@@ -1,10 +1,10 @@
-import { Ng2Page } from './app.po';
+import { Ng22Page } from './app.po';
 
-describe('ng2 App', function() {
-  let page: Ng2Page;
+describe('ng2-2 App', function() {
+  let page: Ng22Page;
 
   beforeEach(() => {
-    page = new Ng2Page();
+    page = new Ng22Page();
   });
 
   it('should display message saying app works', () => {
