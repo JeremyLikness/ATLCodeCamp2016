@@ -24,10 +24,14 @@ Change to the `ng2` subdirectory
 
 `ng build -prod` 
 
+If you are serving from the local filesystem, open `dist\index.html` and remove the `<base href...` tag.
+
 Change to the `ng2-2` subdirectory 
 
 `npm install` 
 
 `ng build -prod` 
+
+If you are serving from the local filesystem, open `dist\index.html` and remove the `<base href...` tag.
 
 Now open the `index.html` at the root code the `code` folder. 
